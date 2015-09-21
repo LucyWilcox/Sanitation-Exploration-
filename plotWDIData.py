@@ -17,7 +17,7 @@ print 'Loaded text data'
 ImprovedSan=[]
 
 for listDataNum, __ in enumerate(wdi_all_data_text):
-	if wdi_all_data_text[listDataNum][2]=='Improved sanitation facilities (% of population with access)':
+	if wdi_all_data_text[listDataNum][3]=='SH.STA.ACSN':
 		ImprovedSanVals=[]
 		ImprovedSanYears=[]
 
@@ -26,18 +26,19 @@ for listDataNum, __ in enumerate(wdi_all_data_text):
 				ImprovedSanVals.append(value)
 				ImprovedSanYears.append(1960+index)
 
-		ImprovedSan.append( (wdi_all_data_text[0][0], wdi_all_data_text[0][2], ImprovedSanVals, ImprovedSanYears) )
+		ImprovedSan.append( (wdi_all_data_text[listDataNum][0], wdi_all_data_text[listDataNum][2], ImprovedSanVals, ImprovedSanYears) )
 		print 'Years =', ImprovedSanYears
 
 print 'Culled through data. Now plotting!'
 
 
 for dataSet in ImprovedSan:
-	print 'Years 2 = ', dataSet[3]
-	#print (dataSet[3], dataSet[2]),'\n'
+	#print 'Years 2 = ', dataSet[3]
+	print 'indicator: ', dataSet[1]
+
 	plt.plot(dataSet[3], dataSet[2], label=dataSet[0])
 
 plt.show()
 
-pprint.pprint(ImprovedSan)
+# pprint.pprint(ImprovedSan)
 
