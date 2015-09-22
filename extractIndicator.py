@@ -17,7 +17,9 @@ print 'Loaded text data'
 ImprovedSan=[]
 
 for listDataNum, __ in enumerate(wdi_all_data_text):
-	if wdi_all_data_text[listDataNum][3]=='SH.STA.ACSN':
+	#print wdi_all_data_text[listDataNum][3]
+	if (wdi_all_data_text[listDataNum][3]=='SE.SEC.PROG.FE.ZS') or (wdi_all_data_text[listDataNum][4]=='SE.SEC.PROG.FE.ZS'):
+		print 'hi!'
 		ImprovedSanVals=[]
 		ImprovedSanYears=[]
 
@@ -31,5 +33,5 @@ for listDataNum, __ in enumerate(wdi_all_data_text):
 
 pprint.pprint(ImprovedSan)
 
-pickle.dump(ImprovedSan, open( "dataPickles/ImprovedSan.p", "wb" ) )
+pickle.dump(ImprovedSan, open( "dataPickles/progSecondarySchool.p", "wb" ) )
 print 'Processed data pickled!'
