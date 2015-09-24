@@ -22,22 +22,17 @@ def ourCountries(fullData, ourCountryList):
 
 def yearCorrelate(data1,data2):
 	''' '''
-	if len(data1) != len(data2):
-		print 'ERROR!!!! RUN ourCountries() FIRST!!!'
+	#(Country, indicator, [values],[years])
+	data1CList = []; data2CList = []; yearsList = []
 
-	data1C = []; data2C = []; years = []
+	indexYear = 3
+	indexValue = 2
+	for d1index, year in enumerate(data1[indexYear]):
+		if year in data2[indexYear]:
+			currentD1Value = data1[indexValue][d1index]
+			yearsList.append(year)
+			data1CList.append(currentD1Value)
+			data2CList.append( data2[indexValue][ data2[indexYear].index(year) ])
 
-	for index, value in enumerate(data1):
-
-		if data1[index][0] != data2[index][0]:
-			print 'ERROR!!!! RUN ourCountries() FIRST!!!'
-
-		for index2, year in enumerate(data1[3]):
-			if data1[index][3][index2] in data2[index][3]:
-				indexDataD2List = data2[index][3].index(data1[index][3][index2])
-				data1C.append( data1[index][2][index2] )
-				data2C.append( data2[index][2][indexDataD2List] )
-				years.append( data1[index][3][index2] )
-
-	return data1C, data2C, years
+	return data1CList, data2CList, yearsList
 
