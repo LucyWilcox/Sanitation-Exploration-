@@ -19,7 +19,9 @@ contaceptList = RADS.ourCountries(contraceptPrev,country_list)
 impWaterList = RADS.ourCountries(impWaterSrc,country_list)
 prog2ndSclFmlList = RADS.ourCountries(progSecndrySclFemale,country_list)
 
-# RADS.yearCorrelate(prog2ndSclFmlList[1], impSanitation[1])
+d1,d2,years = RADS.yearCorrelate(prog2ndSclFmlList[1], impSanitation[1])
 
-plt.plot(prog2ndSclFmlList[1][3],prog2ndSclFmlList[1][2], linewidth=8)
+plt.plot(d1,d2, '*', linewidth=8)
+
+# plt.plot(prog2ndSclFmlList[1][3],prog2ndSclFmlList[1][2], linewidth=8)
 plt.show()
