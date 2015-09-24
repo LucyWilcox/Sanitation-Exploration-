@@ -20,14 +20,21 @@ contaceptList = RADS.ourCountries(contraceptPrev,country_list)
 impWaterList = RADS.ourCountries(impWaterSrc,country_list)
 prog2ndSclFmlList = RADS.ourCountries(progSecndrySclFemale,country_list)
 
-d1,d2,years = RADS.yearCorrelate(prog2ndSclFmlList[1], impSanitation[1])
 
-plt.plot(d1,d2, '*', markersize=20)
+def crossCorrelateValuesForPlotting(data1, data2, countryIndex):
+	d1,d2,years = RADS.yearCorrelate(data1[countryIndex], data2[countryIndex])
 
-d1 = np.array(d1); d2=np.array(d2)
-m,b = np.polyfit(d1, d2, 1)#, full=True)
+	plt.plot(d1,d2, '*', markersize=20)
 
+	d1 = np.array(d1); d2=np.array(d2)
+	m,b = np.polyfit(d1, d2, 1)
+	return d1, d2, m, b
+
+d1, d2, m, b = crossCorrelateValuesForPlotting(prog2ndSclFmlList, impSanitation, 0)
 plt.plot(d1,m*d1+b, linewidth=8)
+plt.xlabel('Female Progression to Secondary School (%)', fontsize=18)
+plt.ylabel('Number of Improved Sanitation Facilities', fontsize=18)
+plt.title('Effect of Improved Sanitation Facilities \n on Female Secondary Schoole Enrollment in Chad', fontsize=20)
 
 # plt.plot(prog2ndSclFmlList[1][3],prog2ndSclFmlList[1][2], linewidth=8)
 plt.show()
