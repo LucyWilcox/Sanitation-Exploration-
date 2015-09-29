@@ -5,19 +5,19 @@ def countryList():
 	'Burkina Faso',
 	'Burundi',
 	'Cameroon',
-	'Cape Verde',
+	#'Cape Verde', #cabo verde
 	'Central African Republic',
 	'Chad',
 	'Comoros',
-	'Congo (Brazzaville)',
-	'Congo (Democratic Republic)',
-	"CC4te d'Ivoire",
+	#'Congo (Brazzaville)',
+	#'Congo (Democratic Republic)', #parens? #congo, rep.
+	#"CC4te d'Ivoire",
 	'Djibouti',
 	'Equatorial Guinea',
 	'Eritrea',
 	'Ethiopia',
 	'Gabon',
-	'The Gambia',
+	#'The Gambia', #gambia, the
 	'Ghana',
 	'Guinea',
 	'Guinea-Bissau',
@@ -33,7 +33,7 @@ def countryList():
 	'Namibia',
 	'Niger',
 	'Nigeria',
-	'RC)union',
+	##'RC)union',
 	'Rwanda',
 	'Sao Tome and Principe',
 	'Senegal',
@@ -46,7 +46,7 @@ def countryList():
 	'Tanzania',
 	'Togo',
 	'Uganda',
-	'Western Sahara',
+	#'Western Sahara',
 	'Zambia',
 	'Zimbabwe']
 	return colist
