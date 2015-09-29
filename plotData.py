@@ -81,7 +81,7 @@ print 'standard error: ', std_err
 plt.ylabel('Female Progression to Secondary School (log base 10 of %)', fontsize=18)
 plt.xlabel('Number of Improved Sanitation Facilities (log base 10)', fontsize=18)
 plt.title('Effect of Improved Sanitation Facilities \n on Female Secondary Schoole Enrollment', fontsize=20)
-# plt.text(.5, .5, 'R value of: '+str(res), fontsize=12)
+plt.text(8.3,1.5, '$R^2$ value of: '+str(r_value**2) + '\n $P$ value of: '+str(p_value), fontsize=18)
 # #plt.legend()
 
 # # plt.plot(prog2ndSclFmlList[1][3],prog2ndSclFmlList[1][2], linewidth=8)
