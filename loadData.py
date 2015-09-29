@@ -8,6 +8,6 @@ Created on Sun Sep 20 18:44:57 2015
 import numpy as np
 import pickle
 
-wdi_data = pickle.load( open( "wdi_all_data.p", "rb" ) )
+#wdi_data = pickle.load( open( "wdi_all_data.p", "rb" ) )
 
-print type(wdi_data[1])
+print wdi_data[0]
