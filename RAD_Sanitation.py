@@ -20,7 +20,9 @@ def ourCountries(fullData, ourCountryList):
 			listDesiredCountries.append(data)
 	return listDesiredCountries
 
-def yearCorrelate(data1,data2):
+
+
+def yearCorrelate(data1,data2,yearOffset=0):
 	''' '''
 	#(Country, indicator, [values],[years])
 	data1CList = []; data2CList = []; yearsList = []
@@ -28,11 +30,12 @@ def yearCorrelate(data1,data2):
 	indexYear = 3
 	indexValue = 2
 	for d1index, year in enumerate(data1[indexYear]):
-		if year in data2[indexYear]:
+		data2Year = year+yearOffset
+		if data2Year in data2[indexYear]:
 			currentD1Value = data1[indexValue][d1index]
 			yearsList.append(year)
 			data1CList.append(currentD1Value)
-			data2CList.append( data2[indexValue][ data2[indexYear].index(year) ])
+			data2CList.append( data2[indexValue][ data2[indexYear].index(data2Year) ])
 
 	return data1CList, data2CList, yearsList
 
