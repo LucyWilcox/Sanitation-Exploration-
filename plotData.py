@@ -26,15 +26,8 @@ prog2ndSclFmlList = RADS.ourCountries(progSecndrySclFemale,country_list)
 
 
 def crossCorrelateValuesForPlotting(data1, data2, countryIndex):
-	print  '\n data 1 = '
-	print 'len data 1',len(data2[countryIndex])
-	pprint.pprint( data1[countryIndex])
-	print 'data 2 = '
-
-	pprint.pprint(data2[countryIndex])
-	d1,d2,years = RADS.yearCorrelate(data1[countryIndex], data2[countryIndex])
-
-	
+	#pprint.pprint(data2[countryIndex])
+	d1,d2,years = RADS.yearCorrelate(data1[countryIndex], data2[countryIndex], yearOffset = 1)
 
 	d1 = np.array(d1); d2=np.array(d2)
 	if (len(d1)>0) and (len(d2)>0):
@@ -47,10 +40,7 @@ def crossCorrelateValuesForPlotting(data1, data2, countryIndex):
 
 d1_all = []; d2_all = []
 for country_index, country_name in enumerate(country_list):
-	print country_name, '  ', country_index
 	d1, d2, m, b = crossCorrelateValuesForPlotting(impSanitation,prog2ndSclFmlList, country_index)
-	print d1, d2, m, b
-	print len(d1)
 	if  (len(d1)>0):
 		# line, = ax.plot(d1, d2, marker = 'o', color='blue', lw=2) #plt.plot(d1,d2, '*', markersize=20, label = country_name)
 		d1_all.append(d1); d2_all.append(d2)
