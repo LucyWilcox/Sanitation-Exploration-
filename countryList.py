@@ -50,3 +50,6 @@ def countryList():
 	'Zambia',
 	'Zimbabwe']
 	return colist
+
+if __name__=="__main__":
+	print countryList()
