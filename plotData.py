@@ -9,7 +9,7 @@ import pylab
 import scipy.stats
 
 
-little_plots = True #Plot the little plots of the scatter data with different time offsets
+little_plots = False #Plot the little plots of the scatter data with different time offsets
 
 #[(Country, indicator, [values],[years]), (Country, indicator, [values],[years]),...]
 
@@ -41,12 +41,12 @@ def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset):
 		return d1, d2, False, False
 
 
-rsquaredCumulative = []; pvalCumulative = []; stderrorCumulative = []; yearOffsetCumulative = []; mCumulative = []
-for yearOffset in range(-5,7):
+rsquaredCumulative = []; pvalCumulative = []; stderrorCumulative = []; yearOffsetCumulative = []; mCumulative = []; pearsonCorrelationCumulative = []
+for yearOffset in range(-7,6):
 	print '\n Year offset is: ', yearOffset
 	d1_all = []; d2_all = []
 	for country_index, country_name in enumerate(country_list):
-		d1, d2, m, b = crossCorrelateValuesForPlotting(impWaterSrc, prog2ndSclFmlList, country_index, yearOffset)
+		d1, d2, m, b = crossCorrelateValuesForPlotting(impSanitation, prog2ndSclFmlList, country_index, yearOffset)
 		if  (len(d1)>0):
 			# line, = ax.plot(d1, d2, marker = 'o', color='blue', lw=2) #plt.plot(d1,d2, '*', markersize=20, label = country_name)
 			d1_all.append(d1); d2_all.append(d2)
@@ -70,14 +70,20 @@ for yearOffset in range(-5,7):
 	if little_plots==True:
 		plt.plot(d1_log,d2_log, 'o', markersize=13, alpha=.5)
 		plt.plot(d1_log, m*d1_log+b, linewidth=5)
+	pearsonCorrelation = scipy.stats.pearsonr(d1_log, d2_log)
 	print 'r squared: ', r_value**2
 	print 'p val: ', p_value
 	print 'standard error: ', std_err
+	print 'line slope: ', m
+	print 'line intercept: ', b
+	print 'Pearson correlation: ', pearsonCorrelation
+	print '\n'
 	rsquaredCumulative.append(10*r_value**2); 
 	pvalCumulative.append(p_value); 
 	stderrorCumulative.append(50*std_err); 
 	yearOffsetCumulative.append(yearOffset);
-	mCumulative.append(m)
+	mCumulative.append(20*m)
+	pearsonCorrelationCumulative.append(pearsonCorrelation)
 
 	if little_plots == True:
 		plt.ylabel('Female Progression to Secondary School (log base 10 of %)', fontsize=18)
@@ -98,11 +104,19 @@ print stderrorCumulative
 plt.plot(yearOffsetCumulative, rsquaredCumulative, linewidth=8, label='$R^2  (x10)$')
 plt.plot(yearOffsetCumulative, pvalCumulative, linewidth=8, label='p value')
 plt.plot(yearOffsetCumulative, stderrorCumulative, linewidth=8, label='standard error ($x50$)')
+leftPearsonsCumulative =  [float(i[0]) for i in pearsonCorrelationCumulative]
+rightPearsonsCumulative =  [float(i[1]) for i in pearsonCorrelationCumulative]
 plt.title('Error From OLS Fitting With Variable Time Offset \n for % Female Secondary School Enrollment and Number Improved Sanitation Facilities', fontsize=24)
 plt.xlabel('Year Offset (years)', fontsize=18)
 plt.ylabel('Error Value', fontsize=18)
-plt.legend(fontsize=16)
+plt.legend(fontsize=16, loc=2)
 plt.show()
 
-plt.plot(yearOffsetCumulative,mCumulative, linewidth=8, label='slope')
+plt.plot(yearOffsetCumulative,mCumulative, linewidth=8, label='Slope ($x20$)')
+plt.plot(yearOffsetCumulative, leftPearsonsCumulative, linewidth=8, label="Left Pearson's correlation $\sigma _L$")
+plt.plot(yearOffsetCumulative, rightPearsonsCumulative, linewidth=8, label="Right Pearson's correlation $\sigma _R$")
+plt.title('Association of Improved Sanitation and % Female Secondary School Progression with Variable Year Offset', fontsize=20)
+plt.xlabel('Year Offset (years)', fontsize=18)
+plt.ylabel('Metric Value', fontsize=18)
+plt.legend(fontsize=16, loc=2)
 plt.show()
