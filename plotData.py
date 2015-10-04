@@ -10,7 +10,8 @@ import scipy.stats
 
 plt.rcParams["figure.figsize"] =[12,12]
 
-little_plots = False #Plot the little plots of the scatter data with different time offsets
+little_plots = True
+ #Plot the little plots of the scatter data with different time offsets
 variable_name_plot_dependent = 'Improved Water Source (% access)'#'Improved Sanitation Facilities (% access)'#
 variable_name_plot_independent = '% Gross Female Secondary School Enrollment'
 
@@ -20,17 +21,22 @@ variable_name_plot_independent = '% Gross Female Secondary School Enrollment'
 impSanitation = pickle.load( open( "dataPickles/ImprovedSan.p", "rb" ) )
 contraceptPrev = pickle.load( open( "dataPickles/contraceptivePrevalance.p", "rb" ) )
 impWaterSrc = pickle.load( open( "dataPickles/improvedWaterSource.p", "rb" ) )
-progSecndrySclFemale = pickle.load( open( "dataPickles/progSecondarySchoolFemale.p", "rb" ) )
-# progSecndrySclFemale = pickle.load( open( "dataPickles/grossSecondarySchoolEnrolment.p", "rb" ) )
+# progSecndrySclFemale = pickle.load( open( "dataPickles/progSecondarySchoolFemale.p", "rb" ) )
+grossSecndrySclFemale = pickle.load( open( "dataPickles/grossSecondarySchoolEnrolment.p", "rb" ) )
 
-print progSecndrySclFemale
+dependent = contraceptPrev
+independent = grossSecndrySclFemale
+
 
 country_list = RADCL.countryList()
 
-sanList = RADS.ourCountries(impSanitation,country_list)
-contaceptList = RADS.ourCountries(contraceptPrev,country_list)
-impWaterList = RADS.ourCountries(impWaterSrc,country_list)
-prog2ndSclFmlList = RADS.ourCountries(progSecndrySclFemale,country_list)
+dependent = RADS.ourCountries(dependent, country_list)
+independent = RADS.ourCountries(independent, country_list)
+
+# sanList = RADS.ourCountries(impSanitation,country_list)
+# contaceptList = RADS.ourCountries(contraceptPrev,country_list)
+# impWaterList = RADS.ourCountries(impWaterSrc,country_list)
+# prog2ndSclFmlList = RADS.ourCountries(progSecndrySclFemale,country_list)
 
 
 def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset):
@@ -51,7 +57,7 @@ for yearOffset in range(-1,1):
 	print '\n Year offset is: ', yearOffset
 	d1_all = []; d2_all = []
 	for country_index, country_name in enumerate(country_list):
-		d1, d2, m, b = crossCorrelateValuesForPlotting(impSanitation, prog2ndSclFmlList, country_index, yearOffset)
+		d1, d2, m, b = crossCorrelateValuesForPlotting(dependent, independent, country_index, yearOffset)
 		if  (len(d1)>0):
 			# line, = ax.plot(d1, d2, marker = 'o', color='blue', lw=2) #plt.plot(d1,d2, '*', markersize=20, label = country_name)
 			d1_all.append(d1); d2_all.append(d2)
