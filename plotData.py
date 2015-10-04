@@ -33,11 +33,6 @@ country_list = RADCL.countryList()
 dependent = RADS.ourCountries(dependent, country_list)
 independent = RADS.ourCountries(independent, country_list)
 
-# sanList = RADS.ourCountries(impSanitation,country_list)
-# contaceptList = RADS.ourCountries(contraceptPrev,country_list)
-# impWaterList = RADS.ourCountries(impWaterSrc,country_list)
-# prog2ndSclFmlList = RADS.ourCountries(progSecndrySclFemale,country_list)
-
 
 def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset):
 	#pprint.pprint(data2[countryIndex])
@@ -81,38 +76,36 @@ for yearOffset in range(-1,1):
 	if little_plots==True:
 		plt.plot(d1_log,d2_log, 'o', markersize=13, alpha=.5)
 		plt.plot(d1_log, m*d1_log+b, linewidth=5)
-	# pearsonCorrelation = scipy.stats.pearsonr(d1_log, d2_log)
-	# print 'r squared: ', r_value**2
-	# print 'p val: ', p_value
-	# print 'standard error: ', std_err
-	# print 'line slope: ', m
-	# print 'line intercept: ', b
-	# print 'Pearson correlation: ', pearsonCorrelation
-	# print '\n'
-	# rsquaredCumulative.append(50*r_value**2); 
-	# pvalCumulative.append(p_value); 
-	# stderrorCumulative.append(50*std_err); 
-	# yearOffsetCumulative.append(yearOffset);
-	# mCumulative.append(50*m)
-	# pearsonCorrelationCumulative.append(pearsonCorrelation)
-
-	if little_plots == True:
+		# plt.show()
 		plt.ylabel(variable_name_plot_independent+' (log base 10)', fontsize=18)
 		plt.xlabel(variable_name_plot_dependent+' (log base 10)', fontsize=18)
 		plt.suptitle('Effect of '+variable_name_plot_dependent+' \n on '+variable_name_plot_independent, fontsize=20)
 		plt.title('$R^2$ value of: '+str(r_value**2) + ', $P$ value of: '+str(p_value)+', Year Offset = '+str(yearOffset), fontsize=13) ##TODO: Fix text so it shows up all the time!!!
-		# #plt.legend()
+		# plt.legend()
+		# plt.plot(independent[1][3],independent[1][2], linewidth=8)
 
-		# # plt.plot(prog2ndSclFmlList[1][3],prog2ndSclFmlList[1][2], linewidth=8)
-
-		#plt.show()
+		plt.show()
 		#plt.savefig(variable_name_plot_dependent+'_offsetScatterPlot_offsetOf'+str(yearOffset)+'.png', papertype='letter')
 		plt.clf()
+	pearsonCorrelation = scipy.stats.pearsonr(d1_log, d2_log)
+	print 'r squared: ', r_value**2
+	print 'p val: ', p_value
+	print 'standard error: ', std_err
+	print 'line slope: ', m
+	print 'line intercept: ', b
+	print 'Pearson correlation: ', pearsonCorrelation
+	print '\n'
+	rsquaredCumulative.append(50*r_value**2); 
+	pvalCumulative.append(p_value); 
+	stderrorCumulative.append(50*std_err); 
+	yearOffsetCumulative.append(yearOffset);
+	mCumulative.append(50*m)
+	pearsonCorrelationCumulative.append(pearsonCorrelation)
 
-# plt.clear()
-# print 'min r^2 error is: ', min(rsquaredCumulative), ' and occurs at index: ', yearOffsetCumulative[rsquaredCumulative.index(min(rsquaredCumulative))]
-# print pvalCumulative
-# print stderrorCumulative
+
+
+print 'min r^2 error is: ', min(rsquaredCumulative), ' and occurs at index: ', yearOffsetCumulative[rsquaredCumulative.index(min(rsquaredCumulative))]
+
 
 plt.rcParams["figure.figsize"] =[18,12]
 plt.show()
