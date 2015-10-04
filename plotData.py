@@ -8,8 +8,11 @@ import matplotlib.pyplot  as pyplot
 import pylab
 import scipy.stats
 
+plt.rcParams["figure.figsize"] =[12,12]
 
 little_plots = False #Plot the little plots of the scatter data with different time offsets
+variable_name_plot_dependent = 'Improved Water Source (% access)'#'Improved Sanitation Facilities (% access)'#
+variable_name_plot_independent = '% Gross Female Secondary School Enrollment'
 
 #[(Country, indicator, [values],[years]), (Country, indicator, [values],[years]),...]
 
@@ -18,7 +21,9 @@ impSanitation = pickle.load( open( "dataPickles/ImprovedSan.p", "rb" ) )
 contraceptPrev = pickle.load( open( "dataPickles/contraceptivePrevalance.p", "rb" ) )
 impWaterSrc = pickle.load( open( "dataPickles/improvedWaterSource.p", "rb" ) )
 progSecndrySclFemale = pickle.load( open( "dataPickles/progSecondarySchoolFemale.p", "rb" ) )
+# progSecndrySclFemale = pickle.load( open( "dataPickles/grossSecondarySchoolEnrolment.p", "rb" ) )
 
+print progSecndrySclFemale
 
 country_list = RADCL.countryList()
 
@@ -42,7 +47,7 @@ def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset):
 
 
 rsquaredCumulative = []; pvalCumulative = []; stderrorCumulative = []; yearOffsetCumulative = []; mCumulative = []; pearsonCorrelationCumulative = []
-for yearOffset in range(-7,6):
+for yearOffset in range(-1,1):
 	print '\n Year offset is: ', yearOffset
 	d1_all = []; d2_all = []
 	for country_index, country_name in enumerate(country_list):
@@ -70,53 +75,83 @@ for yearOffset in range(-7,6):
 	if little_plots==True:
 		plt.plot(d1_log,d2_log, 'o', markersize=13, alpha=.5)
 		plt.plot(d1_log, m*d1_log+b, linewidth=5)
-	pearsonCorrelation = scipy.stats.pearsonr(d1_log, d2_log)
-	print 'r squared: ', r_value**2
-	print 'p val: ', p_value
-	print 'standard error: ', std_err
-	print 'line slope: ', m
-	print 'line intercept: ', b
-	print 'Pearson correlation: ', pearsonCorrelation
-	print '\n'
-	rsquaredCumulative.append(10*r_value**2); 
-	pvalCumulative.append(p_value); 
-	stderrorCumulative.append(50*std_err); 
-	yearOffsetCumulative.append(yearOffset);
-	mCumulative.append(20*m)
-	pearsonCorrelationCumulative.append(pearsonCorrelation)
+	# pearsonCorrelation = scipy.stats.pearsonr(d1_log, d2_log)
+	# print 'r squared: ', r_value**2
+	# print 'p val: ', p_value
+	# print 'standard error: ', std_err
+	# print 'line slope: ', m
+	# print 'line intercept: ', b
+	# print 'Pearson correlation: ', pearsonCorrelation
+	# print '\n'
+	# rsquaredCumulative.append(50*r_value**2); 
+	# pvalCumulative.append(p_value); 
+	# stderrorCumulative.append(50*std_err); 
+	# yearOffsetCumulative.append(yearOffset);
+	# mCumulative.append(50*m)
+	# pearsonCorrelationCumulative.append(pearsonCorrelation)
 
 	if little_plots == True:
-		plt.ylabel('Female Progression to Secondary School (log base 10 of %)', fontsize=18)
-		plt.xlabel('Number of Improved Sanitation Facilities (log base 10)', fontsize=18)
-		plt.title('Effect of Improved Sanitation Facilities \n on Female Secondary Schoole Enrollment', fontsize=20)
-		plt.text(8.3,1.5, '$R^2$ value of: '+str(r_value**2) + '\n $P$ value of: '+str(p_value), fontsize=18)
+		plt.ylabel(variable_name_plot_independent+' (log base 10)', fontsize=18)
+		plt.xlabel(variable_name_plot_dependent+' (log base 10)', fontsize=18)
+		plt.suptitle('Effect of '+variable_name_plot_dependent+' \n on '+variable_name_plot_independent, fontsize=20)
+		plt.title('$R^2$ value of: '+str(r_value**2) + ', $P$ value of: '+str(p_value)+', Year Offset = '+str(yearOffset), fontsize=13) ##TODO: Fix text so it shows up all the time!!!
 		# #plt.legend()
 
 		# # plt.plot(prog2ndSclFmlList[1][3],prog2ndSclFmlList[1][2], linewidth=8)
 
-		plt.show()
+		#plt.show()
+		#plt.savefig(variable_name_plot_dependent+'_offsetScatterPlot_offsetOf'+str(yearOffset)+'.png', papertype='letter')
+		plt.clf()
 
 # plt.clear()
-print 'min r^2 error is: ', min(rsquaredCumulative), ' and occurs at index: ', yearOffsetCumulative[rsquaredCumulative.index(min(rsquaredCumulative))]
-print pvalCumulative
-print stderrorCumulative
+# print 'min r^2 error is: ', min(rsquaredCumulative), ' and occurs at index: ', yearOffsetCumulative[rsquaredCumulative.index(min(rsquaredCumulative))]
+# print pvalCumulative
+# print stderrorCumulative
 
-plt.plot(yearOffsetCumulative, rsquaredCumulative, linewidth=8, label='$R^2  (x10)$')
+plt.rcParams["figure.figsize"] =[18,12]
+plt.show()
+plt.clf()
+
+plt.plot(yearOffsetCumulative, rsquaredCumulative, linewidth=8, label='$R^2 (x50)$')
 plt.plot(yearOffsetCumulative, pvalCumulative, linewidth=8, label='p value')
-plt.plot(yearOffsetCumulative, stderrorCumulative, linewidth=8, label='standard error ($x50$)')
+plt.plot(yearOffsetCumulative, stderrorCumulative, linewidth=8, label='standard error (x50)')
 leftPearsonsCumulative =  [float(i[0]) for i in pearsonCorrelationCumulative]
 rightPearsonsCumulative =  [float(i[1]) for i in pearsonCorrelationCumulative]
-plt.title('Error From OLS Fitting With Variable Time Offset \n for % Female Secondary School Enrollment and Number Improved Sanitation Facilities', fontsize=24)
+plt.title('Error From OLS Fitting With Variable Time Offset \n for '+variable_name_plot_independent+' and '+variable_name_plot_dependent, fontsize=24)
 plt.xlabel('Year Offset (years)', fontsize=18)
 plt.ylabel('Error Value', fontsize=18)
 plt.legend(fontsize=16, loc=2)
-plt.show()
+#plt.show()
+#plt.savefig(variable_name_plot_dependent+'_errorPlot.png', papertype='letter')
 
-plt.plot(yearOffsetCumulative,mCumulative, linewidth=8, label='Slope ($x20$)')
+plt.clf()
+
+plt.plot(yearOffsetCumulative,mCumulative, linewidth=8, label='Slope (x50)')
 plt.plot(yearOffsetCumulative, leftPearsonsCumulative, linewidth=8, label="Left Pearson's correlation $\sigma _L$")
 plt.plot(yearOffsetCumulative, rightPearsonsCumulative, linewidth=8, label="Right Pearson's correlation $\sigma _R$")
-plt.title('Association of Improved Sanitation and % Female Secondary School Progression with Variable Year Offset', fontsize=20)
+plt.title('Association of ' + variable_name_plot_dependent+ ' and '+variable_name_plot_independent+' with Variable Year Offset', fontsize=20)
 plt.xlabel('Year Offset (years)', fontsize=18)
 plt.ylabel('Metric Value', fontsize=18)
 plt.legend(fontsize=16, loc=2)
+#plt.show()
+#plt.savefig(variable_name_plot_dependent+'_associationPlot.png', papertype='letter')
+
+def poincarePlot(d1, variable_name_plot_dependent):
+	for i in range(len(d1)-1):
+		x=d1[i]
+		y=d1[i+1]
+		plt.plot(x,y,'o', markersize=12, alpha=.75, color='blue')
+	
+	plt.title('Poincare Plot of '+variable_name_plot_dependent, fontsize=20)
+	plt.xlabel('Value $x$ in % access', fontsize=18)
+	plt.ylabel('Value $x+1$ in % access', fontsize=18)
+
+plt.clf()
+for countryData in d1_all:
+	poincarePlot(countryData, variable_name_plot_dependent)
 plt.show()
+
+# plt.clf()
+# fftD1 = np.fft.fft(d1_log)
+# plt.plot(fftD1[:10], linewidth=10)
+# plt.show()
