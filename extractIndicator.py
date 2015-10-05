@@ -18,7 +18,7 @@ ImprovedSan=[]
 
 for listDataNum, __ in enumerate(wdi_all_data_text):
 	#print wdi_all_data_text[listDataNum][3]
-	if (wdi_all_data_text[listDataNum][3]=='SE.SEC.PROG.FE.ZS') or (wdi_all_data_text[listDataNum][4]=='SE.SEC.PROG.FE.ZS'):
+	if (wdi_all_data_text[listDataNum][3]=='SE.SEC.ENRR') or (wdi_all_data_text[listDataNum][4]=='SE.SEC.ENRR'):
 		print 'hi!'
 		ImprovedSanVals=[]
 		ImprovedSanYears=[]
@@ -33,5 +33,5 @@ for listDataNum, __ in enumerate(wdi_all_data_text):
 
 pprint.pprint(ImprovedSan)
 
-pickle.dump(ImprovedSan, open( "dataPickles/progSecondarySchool.p", "wb" ) )
+pickle.dump(ImprovedSan, open( "dataPickles/grossSecondarySchoolEnrolment.p", "wb" ) )
 print 'Processed data pickled!'
