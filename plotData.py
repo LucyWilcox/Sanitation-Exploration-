@@ -10,6 +10,12 @@ import scipy.stats
 
 plt.rcParams["figure.figsize"] =[12,12]
 
+data_values = {'% Gross Female Secondary School Enrollment': "dataPickles/grossSecondarySchoolEnrolment.p",
+	'Improved Water Source (% access)':"dataPickles/improvedWaterSource.p",
+	'Improved Sanitation Facilities (% access)':"dataPickles/ImprovedSan.p",
+	'% Access to Contraceptives': "dataPickles/contraceptivePrevalance.p"
+}
+
 little_plots = True
  #Plot the little plots of the scatter data with different time offsets
 variable_name_plot_dependent = 'Improved Water Source (% access)'#'Improved Sanitation Facilities (% access)'#
@@ -17,15 +23,15 @@ variable_name_plot_independent = '% Gross Female Secondary School Enrollment'
 
 #[(Country, indicator, [values],[years]), (Country, indicator, [values],[years]),...]
 
-##Load data from Pickle files of segmented data:
-impSanitation = pickle.load( open( "dataPickles/ImprovedSan.p", "rb" ) )
-contraceptPrev = pickle.load( open( "dataPickles/contraceptivePrevalance.p", "rb" ) )
-impWaterSrc = pickle.load( open( "dataPickles/improvedWaterSource.p", "rb" ) )
-# progSecndrySclFemale = pickle.load( open( "dataPickles/progSecondarySchoolFemale.p", "rb" ) )
-grossSecndrySclFemale = pickle.load( open( "dataPickles/grossSecondarySchoolEnrolment.p", "rb" ) )
+# ##Load data from Pickle files of segmented data:
+# impSanitation = pickle.load( open( "dataPickles/ImprovedSan.p", "rb" ) )
+# contraceptPrev = pickle.load( open( "dataPickles/contraceptivePrevalance.p", "rb" ) )
+# impWaterSrc = pickle.load( open( "dataPickles/improvedWaterSource.p", "rb" ) )
+# # progSecndrySclFemale = pickle.load( open( "dataPickles/progSecondarySchoolFemale.p", "rb" ) )
+# grossSecndrySclFemale = pickle.load( open( "dataPickles/grossSecondarySchoolEnrolment.p", "rb" ) )
 
-dependent = contraceptPrev
-independent = grossSecndrySclFemale
+dependent = pickle.load( open( data_values[variable_name_plot_dependent], "rb" ) )
+independent = pickle.load( open( data_values[variable_name_plot_independent], "rb" ) )
 
 
 country_list = RADCL.countryList()
@@ -135,20 +141,7 @@ plt.legend(fontsize=16, loc=2)
 #plt.show()
 #plt.savefig(variable_name_plot_dependent+'_associationPlot.png', papertype='letter')
 
-def poincarePlot(d1, variable_name_plot_dependent):
-	for i in range(len(d1)-1):
-		x=d1[i]
-		y=d1[i+1]
-		plt.plot(x,y,'o', markersize=12, alpha=.75, color='blue')
-	
-	plt.title('Poincare Plot of '+variable_name_plot_dependent, fontsize=20)
-	plt.xlabel('Value $x$ in % access', fontsize=18)
-	plt.ylabel('Value $x+1$ in % access', fontsize=18)
 
-plt.clf()
-for countryData in d1_all:
-	poincarePlot(countryData, variable_name_plot_dependent)
-plt.show()
 
 # plt.clf()
 # fftD1 = np.fft.fft(d1_log)
