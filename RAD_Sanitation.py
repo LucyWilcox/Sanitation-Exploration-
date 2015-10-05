@@ -2,6 +2,7 @@ import numpy as np
 import pickle
 import math
 import pprint
+import matplotlib.pyplot as plt
 
 #[(Country, indicator, [values],[years]), (Country, indicator, [values],[years]),...]
 
@@ -38,4 +39,6 @@ def yearCorrelate(data1,data2,yearOffset=0):
 			data2CList.append( data2[indexValue][ data2[indexYear].index(data2Year) ])
 
 	return data1CList, data2CList, yearsList
+
+
 
