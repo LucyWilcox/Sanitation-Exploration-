@@ -51,5 +51,10 @@ def countryList():
 	'Zimbabwe']
 	return colist
 
+def comparisonList():
+	colist = ['Sweden', 'United Kingdom', 'Belgium', 'Ethiopia', 'Uganda', 'Zimbabwe']
+	return colist
+
 if __name__=="__main__":
 	print countryList()
+	print comparisonList()
