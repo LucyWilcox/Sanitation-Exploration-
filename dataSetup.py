@@ -40,9 +40,11 @@ wdi_all_data_text = np.recfromcsv('WDI_Data.csv', delimiter=',',usecols=np.arang
 
 wdi_all_data_numbers = np.genfromtxt('WDI_Data.csv', delimiter=',',usecols=np.arange(0,60))
 
-pickle.dump(wdi_all_data_text, open( "wdi_all_data_text.p", "wb" ) )
+#print wdi_all_data_numbers[30]
+
+np.save("test/wdi_all_data_text", wdi_all_data_text)
 print 'Text data from WDI pickled!'
-pickle.dump(wdi_all_data_numbers, open( "wdi_all_data_numbers.p", "wb" ) )
+np.save("test/wdi_all_data_numbers", wdi_all_data_numbers )
 print 'Number data from WDI pickled'
 
 
