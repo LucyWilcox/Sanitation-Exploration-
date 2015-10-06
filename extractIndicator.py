@@ -5,10 +5,12 @@ import matplotlib.pyplot as plt
 import pprint
 
 ##Load pickled data files. If these aren't present, run dataSetup.py
-wdi_all_data_numbers = pickle.load( open( "wdi_all_data_numbers.p", "rb" ) )
+wdi_all_data_numbers = np.load('test/wdi_all_data_numbers.npy')
 print 'Loaded number data!'
-wdi_all_data_text = pickle.load( open( "wdi_all_data_text.p", "rb" ) )
+wdi_all_data_text = np.load( "test/wdi_all_data_text.npy" )
 print 'Loaded text data'
+
+print wdi_all_data_numbers[30]
 
 
 ##Cull through the data and pull out the data for a desired indicator:
@@ -18,12 +20,13 @@ ImprovedSan=[]
 
 for listDataNum, __ in enumerate(wdi_all_data_text):
 	#print wdi_all_data_text[listDataNum][3]
-	if (wdi_all_data_text[listDataNum][3]=='SE.SEC.ENRR') or (wdi_all_data_text[listDataNum][4]=='SE.SEC.ENRR'):
-		print 'hi!'
+	if (wdi_all_data_text[listDataNum][3]=='SH.STA.ACSN') or (wdi_all_data_text[listDataNum][4]=='SH.STA.ACSN'):
+		print wdi_all_data_numbers[listDataNum] # __, '\n'
+		# print 'hi!'
 		ImprovedSanVals=[]
 		ImprovedSanYears=[]
 
-		for index, value in enumerate(wdi_all_data_numbers[listDataNum][3:]):
+		for index, value in enumerate(wdi_all_data_numbers[listDataNum+1][3:]):
 			if not math.isnan(value):
 				ImprovedSanVals.append(value)
 				ImprovedSanYears.append(1960+index)
@@ -33,5 +36,5 @@ for listDataNum, __ in enumerate(wdi_all_data_text):
 
 pprint.pprint(ImprovedSan)
 
-pickle.dump(ImprovedSan, open( "dataPickles/grossSecondarySchoolEnrolment.p", "wb" ) )
+pickle.dump(ImprovedSan, open( "dataPickles/ImprovedSan.p" , "wb" ) )
 print 'Processed data pickled!'
