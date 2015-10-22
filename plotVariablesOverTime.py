@@ -35,8 +35,6 @@ country_list = RADCL.countryList()
 dependent = RADS.ourCountries(dependent, country_list)
 independent = RADS.ourCountries(independent, country_list)
 
-
-
 def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset=0):
 	#pprint.pprint(data2[countryIndex])
 	d1,d2,years = RADS.yearCorrelate(data1[countryIndex], data2[countryIndex], yearOffset = yearOffset)
