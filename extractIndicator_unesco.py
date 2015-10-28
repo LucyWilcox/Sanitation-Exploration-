@@ -19,6 +19,7 @@ print 'Loaded text data'
 data = []
 valueIndex = 6
 
+counryList = []
 
 for rowNumberText, rowText in enumerate(all_data_text):
     rowNumberNumbers = rowNumberText+1
@@ -27,22 +28,20 @@ for rowNumberText, rowText in enumerate(all_data_text):
     indicator = str( rowText[1] )
     code = str( rowText[0] )
     value = all_data_numbers[rowNumberNumbers][valueIndex]
-#    value = str(code)
-    print 'value is: ', code
     code = code.strip('\"')
-    print code
     
-    #if indicator == desiredIndicator:
-    derivedTruth = True
-    for value in  zip(code, desiredCode):
-        #if value is not desiredCode[index]:
-            #derivedTruth = False
-            #print 'FAIL!!!'
-        print value
+    print 'country is: ', country
+
     if code == desiredCode:
         print 'Yeah!!!'
         #print country, indicator, year, value
-        data.append( (country, indicator, value, year) )
+        
+        if not country in counryList:
+            data.append( (country, indicator, [value], [year]) )
+            counryList.append(country)
+        else:
+            print data[ counryList.index(country) ][2].append(value)
+            data[ counryList.index(country) ][3].append(year)
     
     
-pprint.pprint( data )
+        pprint.pprint( data )
