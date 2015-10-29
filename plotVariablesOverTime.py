@@ -4,9 +4,9 @@ import pickle
 import matplotlib.pyplot as plt
 import pprint
 import numpy as np
-import matplotlib.pyplot  as pyplot
 import pylab
 import scipy.stats
+import matplotlib as mpl
 
 plt.rcParams["figure.figsize"] =[12,12]
 
@@ -31,17 +31,25 @@ dependent = pickle.load( open( data_values[variable_name_plot_dependent], "rb" )
 independent = pickle.load( open( data_values[variable_name_plot_independent], "rb" ) )
 
 
-country_list = ['Togo',
-    'Djibouti', 
-    'Niger']#,
+country_list = RADCL.countryList()## ['Togo',
+#    'Djibouti', 
+#    'Niger']#,
 #     
 #    'South Africa']#,
      #'Mauritius']#RADCL.countryList()
 
+def generate_list_of_Countries(data_list):
+    countryList = []
+    
+    for data in data_list:
+        countryList.append( data[0] )
+        
+    return countryList
+        
+
 dependent = RADS.ourCountries(dependent, country_list)
 independent = RADS.ourCountries(independent, country_list)
 
-pprint.pprint(country_list)
 
 ## Re-order the countries in the dependent caraible to the order of the independent variable:
 dependent_new=[]
@@ -51,12 +59,30 @@ for country_set in independent:
         if country_set_dependent[0] == country:
             dependent_new.append(country_set_dependent)
 dependent = dependent_new
-#print 'dep n'
-#pprint.pprint(dependent)
+
+## Get a list of countries present in each data set:
+dependent_country_list = generate_list_of_Countries(dependent)
+independent_country_list = generate_list_of_Countries(independent)
+
+## Exclude any country that isn't included in the other data set
+mutualCountries = []
+for country_set in independent:
+    country = country_set[0]
+    if (country in dependent_country_list):
+        mutualCountries.append(country_set)
+independent = mutualCountries
+
+## Do above exclusion for the other data set:
+mutualCountries = []
+for country_set in dependent:
+    country = country_set[0]
+    if (country in independent_country_list):
+        mutualCountries.append(country_set)
+dependent = mutualCountries
+
 
 
 def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset=0):
-	#pprint.pprint(data2[countryIndex])
 	d1,d2,years = RADS.yearCorrelate(data1[countryIndex], data2[countryIndex], yearOffset = yearOffset)
 
 	d1 = np.array(d1); d2=np.array(d2)
@@ -67,17 +93,15 @@ def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset=0):
 		return d1, d2
 
 
+colorArray = mpl.cm.jet( np.linspace(0,1,len(independent)) )
 
 d1_all = []; d2_all = []
-
-pprint.pprint(country_list)
 for country_index, country_values in enumerate(independent):
 	d1, d2 = crossCorrelateValuesForPlotting(dependent, independent, country_index)
 	if  (len(d1)>0):
 		d1_all.append(d1); d2_all.append(d2)
-		plt.plot(d1,d2, marker='h', ls='.', markersize=15, alpha=.7, label = country_values[0])
-		
-		print country_values, zip(d1,d2)
+		plt.plot(d1,d2, marker='h', ls='.', markersize=15, color = colorArray[country_index], alpha=.7, label = country_values[0])
+
 
 print 
 d1_log = []
