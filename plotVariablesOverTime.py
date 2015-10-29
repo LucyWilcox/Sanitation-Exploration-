@@ -13,14 +13,15 @@ plt.rcParams["figure.figsize"] =[12,12]
 data_values = {'% Gross Female Secondary School Enrollment': "dataPickles/grossSecondarySchoolEnrolment.p",
 	'Improved Water Source (% access)':"dataPickles/improvedWaterSource.p",
 	'Improved Sanitation Facilities (% access)':"dataPickles/ImprovedSan.p",
-	'% Access to Contraceptives': "dataPickles/contraceptivePrevalance.p"
+	'% Access to Contraceptives': "dataPickles/contraceptivePrevalance.p",
+	'Lower Secondary Schools With Toilets (%)': "dataPickles/unesco_Percentage of lower secondary schools with toilets (%).p"
 }
 
 
 little_plots = True # :Plot the little plots of the scatter data with different time offsets
 axies_scale = 'linear' # :Plot nad compute the values with log/log axies. Options include: 'log_log'
 
-variable_name_plot_dependent = 'Improved Water Source (% access)'#'Improved Sanitation Facilities (% access)'#
+variable_name_plot_dependent = 'Lower Secondary Schools With Toilets (%)'#'Improved Sanitation Facilities (% access)'#
 variable_name_plot_independent = '% Gross Female Secondary School Enrollment'
 
 #[(Country, indicator, [values],[years]), (Country, indicator, [values],[years]),...]
@@ -30,10 +31,29 @@ dependent = pickle.load( open( data_values[variable_name_plot_dependent], "rb" )
 independent = pickle.load( open( data_values[variable_name_plot_independent], "rb" ) )
 
 
-country_list = RADCL.countryList()
+country_list = ['Togo',
+    'Djibouti', 
+    'Niger']#,
+#     
+#    'South Africa']#,
+     #'Mauritius']#RADCL.countryList()
 
 dependent = RADS.ourCountries(dependent, country_list)
 independent = RADS.ourCountries(independent, country_list)
+
+pprint.pprint(country_list)
+
+## Re-order the countries in the dependent caraible to the order of the independent variable:
+dependent_new=[]
+for country_set in independent:
+    country = country_set[0]
+    for country_set_dependent in dependent:
+        if country_set_dependent[0] == country:
+            dependent_new.append(country_set_dependent)
+dependent = dependent_new
+#print 'dep n'
+#pprint.pprint(dependent)
+
 
 def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset=0):
 	#pprint.pprint(data2[countryIndex])
@@ -49,12 +69,17 @@ def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset=0):
 
 
 d1_all = []; d2_all = []
-for country_index, country_name in enumerate(country_list):
+
+pprint.pprint(country_list)
+for country_index, country_values in enumerate(independent):
 	d1, d2 = crossCorrelateValuesForPlotting(dependent, independent, country_index)
 	if  (len(d1)>0):
 		d1_all.append(d1); d2_all.append(d2)
+		plt.plot(d1,d2, marker='h', ls='.', markersize=15, alpha=.7, label = country_values[0])
+		
+		print country_values, zip(d1,d2)
 
-
+print 
 d1_log = []
 d2_log = []	
 
@@ -96,16 +121,16 @@ print 'Pearson correlation: ', pearsonCorrelation
 print '\n'
 
 
-plt.clf()
-plt.plot(x, y, 'o', markersize=13, alpha=.5)
-plt.plot(x, m*x+b, linewidth=5)
+#plt.clf()
+#plt.plot(x, y, 'o', markersize=13, alpha=.5)
+plt.plot(x, m*x+b, linewidth=5, color='purple', label='Overall OLS Line')
 # plt.show()
 plt.ylabel(variable_name_plot_independent, fontsize=18)
 plt.xlabel(variable_name_plot_dependent, fontsize=18)
 plt.suptitle('Effect of '+variable_name_plot_dependent+' \n on '+variable_name_plot_independent, fontsize=20)
 subtitle = '$R^2$ value of: '+str(r_value**2) + ', $P$ value of: '+str(p_value)
 plt.title(subtitle, fontsize=13) ##TODO: Fix text so it shows up all the time!!!
-# plt.legend()
+plt.legend()
 # plt.plot(independent[1][3],independent[1][2], linewidth=8)
 
 plt.show()
