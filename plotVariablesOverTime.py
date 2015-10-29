@@ -92,15 +92,24 @@ def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset=0):
 		#print 'Country ', countryIndex, ' has no data for given indicator.'
 		return d1, d2
 
-
-colorArray = mpl.cm.jet( np.linspace(0,1,len(independent)) )
+## Make color map for unique colors per country: 
+## Color map documentation & options here: 
+## http://matplotlib.org/examples/color/colormaps_reference.html
+## Set1 works well
+colorArray = mpl.cm.Set1( np.linspace(0,1,len(independent)) )
 
 d1_all = []; d2_all = []
 for country_index, country_values in enumerate(independent):
 	d1, d2 = crossCorrelateValuesForPlotting(dependent, independent, country_index)
 	if  (len(d1)>0):
 		d1_all.append(d1); d2_all.append(d2)
-		plt.plot(d1,d2, marker='h', ls='.', markersize=15, color = colorArray[country_index], alpha=.7, label = country_values[0])
+		plt.plot(d1,d2, 
+		    marker='h', 
+	        ls='.', 
+	        markersize=15, 
+	        color = colorArray[country_index], 
+	        alpha=.99, 
+	        label = country_values[0]  )
 
 
 print 
@@ -153,8 +162,11 @@ plt.ylabel(variable_name_plot_independent, fontsize=18)
 plt.xlabel(variable_name_plot_dependent, fontsize=18)
 plt.suptitle('Effect of '+variable_name_plot_dependent+' \n on '+variable_name_plot_independent, fontsize=20)
 subtitle = '$R^2$ value of: '+str(r_value**2) + ', $P$ value of: '+str(p_value)
-plt.title(subtitle, fontsize=13) ##TODO: Fix text so it shows up all the time!!!
-plt.legend()
+plt.title(subtitle, fontsize=13)
+
+#Make a pretty legend. Documentation here: http://matplotlib.org/api/legend_api.html
+plt.legend(fontsize=10, loc=1, ncol=2) 
+
 # plt.plot(independent[1][3],independent[1][2], linewidth=8)
 
 plt.show()
