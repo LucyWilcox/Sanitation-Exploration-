@@ -4,8 +4,8 @@ import math
 import matplotlib.pyplot as plt
 import pprint
 
-desiredIndicator = 'Percentage of lower secondary schools with toilets (%)'
-desiredCode = b'SCHBSP_2_PU_WTOIL'
+desiredIndicator = 'Percentage of lower secondary schools with single-sex toilets (%)'
+desiredCode = b'SCHBSP_2_PU_WSTOIL'
 
 set_nan_to_zero = True
 
@@ -32,6 +32,14 @@ for rowNumberText, rowText in enumerate(all_data_text):
     indicator = str( rowText[1] )
     code = str( rowText[0] )
     value = all_data_numbers[rowNumberNumbers][valueIndex]
+    
+    print type(value)
+    
+    ## Make the number fields an actual number
+    try:
+        year = int(year.strip('\"') )
+    except:
+        print 'Problem  with: ', year
     
     ## Remove quotation marks from front and back of string
     code = code.strip('\"')
