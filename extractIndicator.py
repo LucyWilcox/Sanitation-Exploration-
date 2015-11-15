@@ -5,22 +5,24 @@ import matplotlib.pyplot as plt
 import pprint
 
 ##Load pickled data files. If these aren't present, run dataSetup.py
-wdi_all_data_numbers = np.load('test/wdi_all_data_numbers.npy')
+wdi_all_data_numbers = np.load('BulkData/wdi_all_data_numbers.npy')
 print 'Loaded number data!'
-wdi_all_data_text = np.load( "test/wdi_all_data_text.npy" )
+wdi_all_data_text = np.load( "BulkData/wdi_all_data_text.npy" )
 print 'Loaded text data'
-
-print wdi_all_data_numbers[30]
+#2524
+print wdi_all_data_text[2524]
 
 
 ##Cull through the data and pull out the data for a desired indicator:
 ##ImprovedSan format is: [(Country, indicator, [values],[years]), (Country, indicator, [values],[years]),...]
 
 ImprovedSan=[]
+femaleSecondarySchoolEnrollmentCde = 'SE.SEC.ENRI.FE'
+improvedSanitationCode = 'SH.STA.ACSN'
 
 for listDataNum, __ in enumerate(wdi_all_data_text):
 	#print wdi_all_data_text[listDataNum][3]
-	if (wdi_all_data_text[listDataNum][3]=='SH.STA.ACSN') or (wdi_all_data_text[listDataNum][4]=='SH.STA.ACSN'):
+	if (wdi_all_data_text[listDataNum][3]== 'SE.SEC.ENRI.FE') or (wdi_all_data_text[listDataNum][4]== 'SE.SEC.ENRI.FE'):
 		print wdi_all_data_numbers[listDataNum] # __, '\n'
 		# print 'hi!'
 		ImprovedSanVals=[]
@@ -33,8 +35,8 @@ for listDataNum, __ in enumerate(wdi_all_data_text):
 
 		ImprovedSan.append( (wdi_all_data_text[listDataNum][0], wdi_all_data_text[listDataNum][2], ImprovedSanVals, ImprovedSanYears) )
 
-
+print 'Result is: '
 pprint.pprint(ImprovedSan)
 
-pickle.dump(ImprovedSan, open( "dataPickles/ImprovedSan.p" , "wb" ) )
+pickle.dump(ImprovedSan, open( "dataPickles/% Gross Female Secondary School Enrollment-C.p" , "wb" ) )
 print 'Processed data pickled!'

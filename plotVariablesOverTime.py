@@ -14,15 +14,20 @@ data_values = {'% Gross Female Secondary School Enrollment': "dataPickles/grossS
 	'Improved Water Source (% access)':"dataPickles/improvedWaterSource.p",
 	'Improved Sanitation Facilities (% access)':"dataPickles/ImprovedSan.p",
 	'% Access to Contraceptives': "dataPickles/contraceptivePrevalance.p",
-	'Lower Secondary Schools With Toilets (%)': "dataPickles/unesco_Percentage of lower secondary schools with toilets (%).p"
+	'Lower Secondary Schools With Toilets (%)': "dataPickles/unesco_Percentage of lower secondary schools with toilets (%).p",
+	'Percentage of Primary Schools Without Toilets (%)':"dataPickles/unesco_Percentage of primary schools without toilets (%).p",
+	'Percentage of Primary Schools with Toilets (%)':"dataPickles/unesco_Percentage of primary schools with toilets (%).p",
+	'Percentage of Primary Schools with Mixed-Sex Toilets (%)':"dataPickles/unesco_Percentage of primary schools with mixed-sex toilets (%).p",
+	'Percentage of Lower Secondary Schools with Single-Sex Toilets (%)':"dataPickles/unesco_Percentage of lower secondary schools with single-sex toilets (%).p",
+	'Correct gross fem secondary school enrollemnt':'dataPickles/% Gross Female Secondary School Enrollment-C.p'
 }
 
 
 little_plots = True # :Plot the little plots of the scatter data with different time offsets
 axies_scale = 'linear' # :Plot nad compute the values with log/log axies. Options include: 'log_log'
 
-variable_name_plot_dependent = 'Lower Secondary Schools With Toilets (%)'#'Improved Sanitation Facilities (% access)'#
-variable_name_plot_independent = '% Gross Female Secondary School Enrollment'
+variable_name_plot_dependent = 'Percentage of Lower Secondary Schools with Single-Sex Toilets (%)'#'Improved Sanitation Facilities (% access)'#
+variable_name_plot_independent = 'Correct gross fem secondary school enrollemnt'#'% Gross Female Secondary School Enrollment'
 
 #[(Country, indicator, [values],[years]), (Country, indicator, [values],[years]),...]
 
@@ -30,13 +35,51 @@ variable_name_plot_independent = '% Gross Female Secondary School Enrollment'
 dependent = pickle.load( open( data_values[variable_name_plot_dependent], "rb" ) )
 independent = pickle.load( open( data_values[variable_name_plot_independent], "rb" ) )
 
+pprint.pprint(independent)
 
-country_list = RADCL.countryList()## ['Togo',
-#    'Djibouti', 
-#    'Niger']#,
-#     
-#    'South Africa']#,
-     #'Mauritius']#RADCL.countryList()
+
+country_list = ['Angola',
+	'Benin',
+	'Botswana',
+	'Burkina Faso',
+	'Burundi',
+	'Cameroon',
+	'Central African Republic',
+	'Chad',
+	'Comoros',
+	'Djibouti',
+	'Equatorial Guinea',
+	'Eritrea',
+	'Ethiopia',
+	'Gabon',
+	'Ghana',
+	'Guinea',
+	'Guinea-Bissau',
+	'Kenya',
+	'Lesotho',
+	'Liberia',
+	'Madagascar',
+	'Malawi',
+	'Mali',
+	'Mauritania',
+	'Mauritius',
+	'Mozambique',
+	'Namibia',
+	'Niger',
+	'Rwanda',
+	'Sao Tome and Principe',
+	'Senegal',
+	'Seychelles',
+	'Sierra Leone',
+	'Somalia',
+	'South Africa',
+	'Sudan',
+	#'Swaziland',
+	#'Tanzania',
+	#'Togo',
+	'Uganda',
+	'Zambia',
+	'Zimbabwe']
 
 def generate_list_of_Countries(data_list):
     countryList = []
@@ -82,37 +125,75 @@ dependent = mutualCountries
 
 
 
-def crossCorrelateValuesForPlotting(data1, data2, countryIndex, yearOffset=0):
-	d1,d2,years = RADS.yearCorrelate(data1[countryIndex], data2[countryIndex], yearOffset = yearOffset)
+###def crossCorrelateValuesForPlotting(data1, data2, country, yearOffset=0):
+###    for 
+###	d1,d2,years = RADS.yearCorrelate(data1, data2[countryIndex], yearOffset = yearOffset)
 
-	d1 = np.array(d1); d2=np.array(d2)
-	if (len(d1)>1) and (len(d2)>1):
-		return d1, d2
-	else:
-		#print 'Country ', countryIndex, ' has no data for given indicator.'
-		return d1, d2
+###	d1 = np.array(d1); d2=np.array(d2)
+###	if (len(d1)>1) and (len(d2)>1):
+###		return d1, d2
+###	else:
+###		#print 'Country ', countryIndex, ' has no data for given indicator.'
+###		return d1, d2
 
 ## Make color map for unique colors per country: 
 ## Color map documentation & options here: 
 ## http://matplotlib.org/examples/color/colormaps_reference.html
 ## Set1 works well
-colorArray = mpl.cm.Set1( np.linspace(0,1,len(independent)) )
+colorArray = mpl.cm.hsv( np.linspace(0,1,len(country_list)) )
+
 
 d1_all = []; d2_all = []
-for country_index, country_values in enumerate(independent):
-	d1, d2 = crossCorrelateValuesForPlotting(dependent, independent, country_index)
-	if  (len(d1)>0):
-		d1_all.append(d1); d2_all.append(d2)
-		plt.plot(d1,d2, 
-		    marker='h', 
-	        ls='.', 
-	        markersize=15, 
-	        color = colorArray[country_index], 
-	        alpha=.99, 
-	        label = country_values[0]  )
+for country in country_list:
+    #print 'Country is: ', country
+    #d1, d2 = crossCorrelateValuesForPlotting(dependent, independent, country_index)
+    depSet=False
+    indSet=False
+    for valueSet in dependent:
+        if valueSet[0] == country:
+            depSet = valueSet
+    for valueSet in independent:
+        if valueSet[0]==country:
+            indSet = valueSet
+    if (depSet!=False) and (indSet!=False):
+        d1, d2, years = RADS.yearCorrelate(depSet, indSet, 0)
+        d1 = np.array(d1)
+        d2 = np.array(d2)
+        m, b, r_value, p_value, std_err = scipy.stats.linregress(d1,d2)
+        
+        
+        if  (len(d1)>1):
+            currentLenD1 = len(d1)
+            d1_all.append(d1); d2_all.append(d2)
+            plt.plot(d1,d2, 
+                marker='h', 
+                ls='.', 
+                markersize=15, 
+                color = colorArray[country_list.index(country)], 
+                alpha=.99, 
+                label = country  )
+    #        print country_values[0]
+    #        print country_values
+                
+            plt.plot(d1, d1*m + b, color = colorArray[country_list.index(country)], linewidth=3, linestyle=':')
+    #        print country_values[0], 'has data'
+    #        if country_values[0] == 'Benin':
+    #            print d1
+    #            print d2
+#    else:
+#        print country_values[0], 'has no data'
+#        print d1[0]
+#        try:
+#            if d1[0]<50:
+#                print '\nproblem child:   ', country_values, zip(d1,d2)
+#        except:
+#            print '\nevil child:   ', country_values
+#            print 'd1: ', d1, ' d2: ', d2
+#            print len(d1), currentLenD1
+#        if d2[0]>30:
+#            print '\ntall one: ', country_values, zip(d1,d2)
 
 
-print 
 d1_log = []
 d2_log = []	
 
@@ -165,7 +246,7 @@ subtitle = '$R^2$ value of: '+str(r_value**2) + ', $P$ value of: '+str(p_value)
 plt.title(subtitle, fontsize=13)
 
 #Make a pretty legend. Documentation here: http://matplotlib.org/api/legend_api.html
-plt.legend(fontsize=10, loc=1, ncol=2) 
+plt.legend(fontsize=10, loc=2, ncol=2) 
 
 # plt.plot(independent[1][3],independent[1][2], linewidth=8)
 

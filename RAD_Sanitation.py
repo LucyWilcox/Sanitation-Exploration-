@@ -39,6 +39,4 @@ def yearCorrelate(data1,data2,yearOffset=0):
 			data2CList.append( data2[indexValue][ data2[indexYear].index(data2Year) ])
 
 	return data1CList, data2CList, yearsList
-
-
-
+	
