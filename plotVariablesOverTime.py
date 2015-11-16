@@ -27,7 +27,7 @@ little_plots = True # :Plot the little plots of the scatter data with different 
 axies_scale = 'linear' # :Plot nad compute the values with log/log axies. Options include: 'log_log'
 
 variable_name_plot_dependent = 'Percentage of Lower Secondary Schools with Single-Sex Toilets (%)'#'Improved Sanitation Facilities (% access)'#
-variable_name_plot_independent = 'Correct gross fem secondary school enrollemnt'#'% Gross Female Secondary School Enrollment'
+variable_name_plot_independent = '% Gross Female Secondary School Enrollment'#'% Gross Female Secondary School Enrollment'
 
 #[(Country, indicator, [values],[years]), (Country, indicator, [values],[years]),...]
 
